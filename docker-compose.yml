@@ -1,0 +1,20 @@
+services:
+  dockercfg-manager:
+    build: .
+    image: dockercfg-manager:latest
+    container_name: dockercfg-manager
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      TZ: Asia/Shanghai
+      APP_PASSWORD: "${APP_PASSWORD:?请设置 APP_PASSWORD}"
+      COMPOSE_ROOT: /compose
+      DOCKER_SOCKET: /var/run/docker.sock
+      STATIC_DIR: /app/web
+    volumes:
+      # 关键：挂载 docker.sock 用于读取容器状态和执行 compose 命令
+      - /var/run/docker.sock:/var/run/docker.sock
+      # 关键：把存放所有 compose 项目的根目录挂载进来
+      # 请把它改成你 NAS 上实际存放 compose 项目的目录
+      - /volume1/docker:/compose

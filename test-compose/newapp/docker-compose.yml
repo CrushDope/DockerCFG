@@ -1,0 +1,15 @@
+services:
+  web:
+    container_name: newapp
+    environment:
+      TZ: Asia/Shanghai
+    image: nginx:alpine
+    ports:
+      - 8080:80
+    restart: unless-stopped
+    volumes:
+      - ./data:/usr/share/nginx/html
+      - ./conf:/etc/nginx/conf.d:ro
+volumes:
+  conf: null
+  data: null

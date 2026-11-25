@@ -1,0 +1,9 @@
+services:
+  gybridge:
+    image: gybridge:latest
+    container_name: gybridge
+    restart: unless-stopped
+    ports:
+      - "8097:80"
+    volumes:
+      - ./data:/app/data

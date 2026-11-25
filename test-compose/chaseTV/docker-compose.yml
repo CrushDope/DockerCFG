@@ -1,0 +1,13 @@
+services:
+  chasetv:
+    image: crushdope/chasetv:latest
+    container_name: chasetv
+    restart: unless-stopped
+    ports:
+      - 8096:8096
+    environment:
+      TMDB_API_KEY: ${TMDB_API_KEY}
+      TZ: ${TZ}
+    volumes:
+      - ./config:/config
+      - /volume1/media:/media
