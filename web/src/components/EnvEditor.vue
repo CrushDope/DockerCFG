@@ -48,6 +48,15 @@ function toggleSource(i, toRef) {
     update(i, { isRef: false, refKey: '', raw: r.value });
   }
 }
+
+/**
+ * 生成 compose 中的引用写法，例如 ${TMDB_API_KEY}。
+ * 放在脚本里拼装，模板中只做插值——Vue 模板不解析 ${...}，
+ * 直接写在模板里会被当成纯文本输出。
+ */
+function refExpr(r) {
+  return '${' + (r.refKey || r.key) + '}';
+}
 </script>
 
 <template>
@@ -82,7 +91,7 @@ function toggleSource(i, toRef) {
             size="small"
             @update:model-value="(v) => update(i, { value: v })"
           />
-          <code v-if="r.isRef && r.key" class="env-raw">compose 中写作 ${`${r.refKey || r.key}`}</code>
+          <code v-if="r.isRef && r.key" class="env-raw">compose 中写作 {{ refExpr(r) }}</code>
         </span>
         <span class="env-td env-td-source">
           <div class="env-source" role="group" :aria-label="`第 ${i + 1} 个变量的来源`">
