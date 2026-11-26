@@ -54,7 +54,6 @@ function attrSet(entry, key) {
         <el-input
           :model-value="entry.name"
           :placeholder="`${def.label}名称`"
-          size="small"
           class="res-name"
           @update:model-value="(v) => setEntry(i, { name: v })"
         />

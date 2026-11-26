@@ -9,6 +9,7 @@
 import { SERVICE_FIELDS, STRUCT_DEFS } from './composeSchema.js';
 import {
   deepClone, toRows, rowsToValue, rowsEqual,
+  toMappings, mappingsToValue, mappingsEqual,
   structToEditor, editorToStruct, editorEqual,
 } from './composeFields.js';
 
@@ -24,7 +25,11 @@ export function loadServiceModel(name, cfg, envItems = []) {
     origEnvironment: deepClone(envItems || []),
   };
   for (const f of SERVICE_FIELDS) {
-    if (f.type === 'list' || f.type === 'kv') {
+    if (f.type === 'mapping') {
+      const rows = toMappings(c[f.key], f.flavor);
+      svc[f.key] = rows;
+      svc.origRows[f.key] = deepClone(rows);
+    } else if (f.type === 'list' || f.type === 'kv') {
       const rows = toRows(c[f.key], f.type);
       svc[f.key] = rows;
       svc.origRows[f.key] = deepClone(rows);
@@ -95,7 +100,12 @@ export function buildService(svc) {
   const out = deepClone(svc.raw || {});
   for (const f of SERVICE_FIELDS) {
     const origRaw = svc.raw ? svc.raw[f.key] : undefined;
-    if (f.type === 'list' || f.type === 'kv') {
+    if (f.type === 'mapping') {
+      if (mappingsEqual(svc[f.key], svc.origRows[f.key])) continue; // 未改动，保留原值（含长语法对象）
+      const v = mappingsToValue(svc[f.key], f.flavor);
+      if (v === undefined) delete out[f.key];
+      else out[f.key] = v;
+    } else if (f.type === 'list' || f.type === 'kv') {
       if (rowsEqual(svc[f.key], svc.origRows[f.key])) continue; // 未改动，保留原值
       const v = rowsToValue(svc[f.key], f.type, f.valueMode);
       if (v === undefined) delete out[f.key];

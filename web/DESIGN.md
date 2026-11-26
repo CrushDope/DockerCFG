@@ -145,9 +145,10 @@
 | 场景 | 规则 |
 |---|---|
 | 标签 | 中文名（已配置时加粗变深）+ 蓝色圆点 + 英文键（弱化等宽） |
-| 单值 | `el-input` / `el-select` / `el-switch`，尺寸统一为 `small` |
+| 单值 | `el-input` / `el-select` / `el-switch`，使用 Element Plus 默认尺寸（`--el-component-size: 38px`），不再用 `small` |
 | 列表 | `RowsEditor`：每行一个输入框 + 删除按钮，底部为虚线「添加」按钮 |
 | 键值对 | `RowsEditor`：每行「名称 + 取值」双输入框 |
+| 宿主机 ↔ 容器映射 | `MappingEditor`：列头标注两侧含义，每行「宿主机输入 → 容器输入 + 模式下拉 + 删除」；用于端口、挂载、设备。端口模式为协议（TCP/UDP），挂载为权限（ro/rw），设备为 r/w/rwm。未改动的行保留原始长语法对象（含键顺序与数字类型） |
 | 结构化 | `StructEditor`：浅底圆角嵌套面板，内部两列栅格；面板标题为该字段中文名 + 英文键 |
 | 环境变量 | 独立表格：变量名 / 值 / 来源 / 操作；来源为 `.env` ↔ `内联` 分段开关，切换即搬迁取值 |
 
@@ -172,7 +173,8 @@
 | `components/ProjectList.vue` | 项目条目渲染（列表 / 卡片两种形态） |
 | `components/ComposeEditor.vue` | 三栏工作台、字段搜索过滤、吸底保存栏 |
 | `components/FieldLabel.vue` | 统一标签（中文名 + 状态点 + 英文键） |
-| `components/SchemaField.vue` | 单字段控件渲染（input/select/switch/list/kv/textarea） |
+| `components/SchemaField.vue` | 单字段控件渲染（input/select/switch/list/kv/mapping/textarea） |
+| `components/MappingEditor.vue` | 宿主机 ↔ 容器双列映射编辑器（端口 / 挂载 / 设备） |
 | `components/StructEditor.vue` | build / healthcheck / deploy / logging / ulimits 嵌套面板 |
 | `components/RowsEditor.vue` | 列表与键值对行编辑器 |
 | `components/EnvEditor.vue` | 环境变量表格与 `.env` 来源切换 |

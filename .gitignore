@@ -34,3 +34,6 @@ Thumbs.db
 
 # 测试夹具例外：仅含占位值（TMDB_API_KEY=NEW_KEY_FROM_ENV 等），供新克隆直接跑通回归
 !test-compose/**/.env
+
+# 浏览器回归测试动态创建的临时项目
+test-compose/9kg/

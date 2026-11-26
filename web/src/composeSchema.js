@@ -3,7 +3,9 @@
  *
  * key   —— 写入 compose 文件的英文字段名
  * label —— 页面展示的中文名
- * type  —— 控件类型：input / select / switch / list / kv / struct / env
+ * type  —— 控件类型：input / select / switch / list / kv / mapping / struct / env
+ * mapping 用于「宿主机 ↔ 容器」成对字段（端口、挂载、设备），
+ *   flavor 决定拆分/拼回规则与模式选项：port / volume / device
  *
  * 表单由这份 schema 驱动渲染，因此新增字段只需在这里加一行。
  */
@@ -52,7 +54,12 @@ export const SERVICE_FIELDS = [
   { key: 'privileged', label: '特权模式', type: 'switch', group: 'basic', help: '给予容器几乎等同宿主机的权限' },
 
   // ---------------- 网络 ----------------
-  { key: 'ports', label: '端口映射', type: 'list', group: 'network', placeholder: '8080:80', addText: '添加端口', help: '格式：宿主机端口:容器端口，可加 /tcp、/udp' },
+  {
+    key: 'ports', label: '端口映射', type: 'mapping', flavor: 'port', group: 'network',
+    hostLabel: '宿主机端口', containerLabel: '容器端口',
+    hostPlaceholder: '8080 或 127.0.0.1:8080', containerPlaceholder: '80',
+    addText: '添加端口', help: '左侧填写宿主机端口（可带 IP），右侧填写容器端口，协议单独选择',
+  },
   { key: 'expose', label: '暴露端口', type: 'list', group: 'network', placeholder: '80', addText: '添加端口' },
   { key: 'networks', label: '加入网络', type: 'kv', group: 'network', valueMode: 'json', keyPlaceholder: '网络名', valuePlaceholder: '留空即可', addText: '添加网络', help: '需先在「顶层配置」中声明同名网络' },
   {
@@ -69,9 +76,19 @@ export const SERVICE_FIELDS = [
   { key: 'extra_hosts', label: '额外主机名', type: 'list', group: 'network', placeholder: 'nas.local:192.168.1.10', addText: '添加' },
 
   // ---------------- 存储 ----------------
-  { key: 'volumes', label: '目录挂载', type: 'list', group: 'storage', placeholder: './data:/data:ro', addText: '添加挂载', help: '格式：来源:目标[:ro]，相对路径相对 compose 文件所在目录' },
+  {
+    key: 'volumes', label: '目录挂载', type: 'mapping', flavor: 'volume', group: 'storage',
+    hostLabel: '宿主机路径 / 卷名', containerLabel: '容器内路径',
+    hostPlaceholder: './data 或 pgdata', containerPlaceholder: '/data',
+    addText: '添加挂载', help: '左侧填写宿主机路径或卷名，右侧填写容器内路径，读写权限单独选择',
+  },
   { key: 'tmpfs', label: '内存挂载', type: 'list', group: 'storage', placeholder: '/tmp', addText: '添加' },
-  { key: 'devices', label: '设备映射', type: 'list', group: 'storage', placeholder: '/dev/dri:/dev/dri', addText: '添加' },
+  {
+    key: 'devices', label: '设备映射', type: 'mapping', flavor: 'device', group: 'storage',
+    hostLabel: '宿主机设备', containerLabel: '容器内设备',
+    hostPlaceholder: '/dev/dri', containerPlaceholder: '/dev/dri',
+    addText: '添加设备', help: '左侧填写宿主机设备路径，右侧填写容器内设备路径',
+  },
 
   // ---------------- 环境变量 ----------------
   { key: 'env_file', label: '变量文件', type: 'list', group: 'env', placeholder: '.env', addText: '添加', help: '除项目级 .env 外，还可额外引入其他变量文件' },

@@ -2,9 +2,10 @@
 /**
  * 单个字段的控件渲染器（只负责控件，标签由外层统一排布）。
  *
- * 控件类型：input / select / switch / list / kv / textarea
+ * 控件类型：input / select / switch / list / kv / mapping / textarea
  */
 import RowsEditor from './RowsEditor.vue';
+import MappingEditor from './MappingEditor.vue';
 
 const props = defineProps({
   field: { type: Object, required: true },
@@ -24,7 +25,6 @@ function set(v) {
       :model-value="modelValue"
       :aria-label="field.label"
       :placeholder="field.placeholder"
-      size="small"
       clearable
       @update:model-value="set"
     />
@@ -34,7 +34,6 @@ function set(v) {
       :model-value="modelValue"
       :aria-label="field.label"
       :placeholder="field.placeholder || '未设置'"
-      size="small"
       clearable
       style="width: 100%"
       @update:model-value="set"
@@ -74,6 +73,14 @@ function set(v) {
       @update:model-value="set"
     />
 
+    <MappingEditor
+      v-else-if="field.type === 'mapping'"
+      :model-value="modelValue"
+      :flavor="field.flavor"
+      :field="field"
+      @update:model-value="set"
+    />
+
     <el-input
       v-else-if="field.type === 'textarea'"
       :model-value="modelValue"
@@ -81,7 +88,6 @@ function set(v) {
       type="textarea"
       :rows="3"
       :placeholder="field.placeholder"
-      size="small"
       @update:model-value="set"
     />
 

@@ -36,7 +36,6 @@ function remove(i) {
         :model-value="r.key"
         :placeholder="kind === 'kv' ? keyPlaceholder : placeholder"
         :aria-label="`${kind === 'kv' ? keyPlaceholder : placeholder} ${i + 1}`"
-        size="small"
         @update:model-value="(v) => update(i, { key: v })"
       />
       <el-input
@@ -45,13 +44,11 @@ function remove(i) {
         :model-value="r.value"
         :placeholder="valuePlaceholder"
         :aria-label="`${valuePlaceholder} ${i + 1}`"
-        size="small"
         @update:model-value="(v) => update(i, { value: v })"
       />
       <el-button
         class="rows-del"
         :icon="Delete"
-        size="small"
         text
         type="danger"
         :aria-label="`删除第 ${i + 1} 行`"

@@ -15,7 +15,7 @@ import {
   Plus, Refresh, Search, Setting, Tickets,
 } from '@element-plus/icons-vue';
 import { SERVICE_FIELDS, SERVICE_GROUPS, STRUCT_DEFS, TOP_FIELDS, TOP_RESOURCE_DEFS, fieldsOfGroup } from '../composeSchema';
-import { deepClone, toRows, rowsEqual, editorEqual } from '../composeFields';
+import { deepClone, toRows, rowsEqual, mappingsEqual, editorEqual } from '../composeFields';
 import {
   loadServiceModel, buildCompose,
   envDirty, envEqual, collectRefUpdates, stable,
@@ -214,7 +214,7 @@ async function saveAll() {
 function fieldSet(f, svc) {
   if (!svc) return false;
   const v = svc[f.key];
-  if (f.type === 'list' || f.type === 'kv') return Array.isArray(v) && v.length > 0;
+  if (f.type === 'mapping' || f.type === 'list' || f.type === 'kv') return Array.isArray(v) && v.length > 0;
   if (f.type === 'struct') {
     return Object.values(v || {}).some((x) => {
       if (x === undefined || x === null || x === false || x === '') return false;
@@ -242,7 +242,9 @@ function groupTotal(gid) {
 function serviceDirty(svc) {
   if (!svc) return false;
   for (const f of SERVICE_FIELDS) {
-    if (f.type === 'list' || f.type === 'kv') {
+    if (f.type === 'mapping') {
+      if (!mappingsEqual(svc[f.key], svc.origRows[f.key])) return true;
+    } else if (f.type === 'list' || f.type === 'kv') {
       if (!rowsEqual(svc[f.key], svc.origRows[f.key])) return true;
     } else if (f.type === 'struct') {
       if (!editorEqual(svc[f.key], svc.origStruct[f.key])) return true;
@@ -473,7 +475,6 @@ watch([fieldQuery, onlySet], () => {
               <span class="ce-svc-ident-label">正在编辑服务</span>
               <el-input
                 v-model="current.name"
-                size="small"
                 class="ce-svc-name-field"
                 id="compose-service-name"
                 aria-label="服务名"

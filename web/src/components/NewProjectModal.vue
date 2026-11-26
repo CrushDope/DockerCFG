@@ -102,35 +102,35 @@ async function submit() {
 
     <el-divider content-position="left">端口映射</el-divider>
     <div v-for="(p, i) in form.ports" :key="i" class="row-item">
-      <el-input v-model="p.host" aria-label="宿主端口" placeholder="宿主端口" size="small" />
+      <el-input v-model="p.host" aria-label="宿主端口" placeholder="宿主端口" />
       <span class="row-sep">:</span>
-      <el-input v-model="p.container" aria-label="容器端口" placeholder="容器端口" size="small" />
-      <el-select v-model="p.protocol" aria-label="端口协议" size="small" style="width:90px">
+      <el-input v-model="p.container" aria-label="容器端口" placeholder="容器端口" />
+      <el-select v-model="p.protocol" aria-label="端口协议" style="width:90px">
         <el-option label="tcp" value="tcp" />
         <el-option label="udp" value="udp" />
       </el-select>
-      <el-button type="danger" plain size="small" @click="removePort(i)">删除</el-button>
+      <el-button type="danger" plain @click="removePort(i)">删除</el-button>
     </div>
-    <el-button text type="primary" size="small" @click="addPort">+ 添加端口</el-button>
+    <el-button text type="primary" @click="addPort">+ 添加端口</el-button>
 
     <el-divider content-position="left">目录挂载</el-divider>
     <div v-for="(v, i) in form.volumes" :key="i" class="row-item">
-      <el-input v-model="v.source" aria-label="宿主路径" placeholder="宿主路径" size="small" />
+      <el-input v-model="v.source" aria-label="宿主路径" placeholder="宿主路径" />
       <span class="row-sep">:</span>
-      <el-input v-model="v.target" aria-label="容器路径" placeholder="容器路径" size="small" />
+      <el-input v-model="v.target" aria-label="容器路径" placeholder="容器路径" />
       <el-checkbox v-model="v.readOnly" label="只读" />
-      <el-button type="danger" plain size="small" @click="removeVolume(i)">删除</el-button>
+      <el-button type="danger" plain @click="removeVolume(i)">删除</el-button>
     </div>
-    <el-button text type="primary" size="small" @click="addVolume">+ 添加挂载</el-button>
+    <el-button text type="primary" @click="addVolume">+ 添加挂载</el-button>
 
     <el-divider content-position="left">环境变量</el-divider>
     <div v-for="(e, i) in form.environment" :key="i" class="row-item">
-      <el-input v-model="e.key" aria-label="环境变量名" placeholder="KEY" size="small" class="create-env-key" />
+      <el-input v-model="e.key" aria-label="环境变量名" placeholder="KEY" class="create-env-key" />
       <span class="row-sep">=</span>
-      <el-input v-model="e.value" aria-label="环境变量值" placeholder="值" size="small" />
-      <el-button type="danger" plain size="small" @click="removeEnv(i)">删除</el-button>
+      <el-input v-model="e.value" aria-label="环境变量值" placeholder="值" />
+      <el-button type="danger" plain @click="removeEnv(i)">删除</el-button>
     </div>
-    <el-button text type="primary" size="small" @click="addEnv">+ 添加变量</el-button>
+    <el-button text type="primary" @click="addEnv">+ 添加变量</el-button>
 
     <el-divider content-position="left">.env 文件内容（可选）</el-divider>
     <el-input

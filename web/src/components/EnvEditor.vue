@@ -79,7 +79,6 @@ function refExpr(r) {
           <el-input
             :model-value="r.key"
             placeholder="KEY" aria-label="环境变量名"
-            size="small"
             class="mono"
             @update:model-value="(v) => update(i, { key: v })"
           />
@@ -88,7 +87,6 @@ function refExpr(r) {
           <el-input
             :model-value="r.value" aria-label="环境变量值"
             :placeholder="r.isRef ? '来自 .env 的真实值' : '直接写入 compose 的值'"
-            size="small"
             @update:model-value="(v) => update(i, { value: v })"
           />
           <code v-if="r.isRef && r.key" class="env-raw">compose 中写作 {{ refExpr(r) }}</code>

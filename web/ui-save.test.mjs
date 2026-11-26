@@ -45,8 +45,9 @@ check('保存栏提示出现未保存状态', /未保存/.test(dirty), dirty);
 // 2) 切到「网络」分组改端口
 await page.locator('.ce-nav-item:has-text("网络")').click();
 await page.waitForTimeout(300);
-const portInput = page.locator('.ce-row:has-text("端口映射") input').first();
-await portInput.fill('9090:80');
+// 端口映射已拆成双列：只改宿主机端口，容器端口保持原值
+const portHost = page.locator('.ce-row:has-text("端口映射") .map-host input').first();
+await portHost.fill('9090');
 await page.waitForTimeout(300);
 
 // 3) 保存
@@ -68,7 +69,7 @@ await page.waitForTimeout(300);
 await page.locator('.ce-row:has-text("镜像") input').first().fill('nginx:1.25');
 await page.locator('.ce-nav-item:has-text("网络")').click();
 await page.waitForTimeout(300);
-await page.locator('.ce-row:has-text("端口映射") input').first().fill('8080:80');
+await page.locator('.ce-row:has-text("端口映射") .map-host input').first().fill('8080');
 await page.locator('.ce-savebar button:has-text("保存全部配置")').click();
 await page.waitForTimeout(1500);
 const restored = readFileSync(FILE, 'utf8');
